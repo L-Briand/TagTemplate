@@ -1,14 +1,16 @@
-package net.orandja.templator
+package net.orandja.templator.tt
 
-import net.orandja.templator.Template.Range.Type.TAG
-import net.orandja.templator.Template.Range.Type.TEXT
-
+import net.orandja.templator.Delimiters
+import net.orandja.templator.TemplateRenderer
+import net.orandja.templator.tt.Template.Range.Type.TAG
+import net.orandja.templator.tt.Template.Range.Type.TEXT
 
 class Template(
     private val raw: CharSequence,
     delimiters: Delimiters = Delimiters(),
 ) : TemplateRenderer {
 
+    // This is more efficient than a sealed class.
     private data class Range(val type: Type, val from: Int, val to: Int) {
         enum class Type { TEXT, TAG }
     }
@@ -61,5 +63,9 @@ class Template(
         }
         return true
     }
+
+    override fun get(vararg keys: String?): TemplateRenderer = this
+
+    override fun toString(): String = "T'$raw'"
 }
 

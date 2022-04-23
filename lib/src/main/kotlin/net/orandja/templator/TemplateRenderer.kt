@@ -4,8 +4,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 
-fun interface TemplateRenderer {
+interface TemplateRenderer {
     suspend fun render(key: String?, context: TemplateRenderer, onNew: (CharSequence) -> Unit): Boolean
+    fun get(vararg keys: String?): TemplateRenderer
+    fun context(): TemplateRenderer? = null
 }
 
 inline fun <reified T : TemplateRenderer> T.renderFlow(key: String? = null): Flow<CharSequence> = flow {
