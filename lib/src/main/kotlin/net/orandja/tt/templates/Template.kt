@@ -40,7 +40,7 @@ class Template(
             }
             idx++
         }
-        if (lastIdx < raw.length - 1) {
+        if (lastIdx < raw.length) {
             updatableRanges += Range(TEXT, lastIdx, raw.length)
         }
         ranges = updatableRanges.toList()
