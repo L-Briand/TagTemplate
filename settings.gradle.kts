@@ -1,3 +1,3 @@
-rootProject.name = "templator"
+rootProject.name = "tt"
 
 include(":sample", ":lib")

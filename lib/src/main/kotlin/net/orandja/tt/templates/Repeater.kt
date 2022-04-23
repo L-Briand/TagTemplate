@@ -1,6 +1,6 @@
-package net.orandja.templator.tt
+package net.orandja.tt.templates
 
-import net.orandja.templator.TemplateRenderer
+import net.orandja.tt.TemplateRenderer
 
 class Repeater(
     private val times: Int,
@@ -11,5 +11,5 @@ class Repeater(
         (0 until times).all { render.render(key, context, onNew) }
 
     override fun get(vararg keys: String?): TemplateRenderer =
-        if(keys.isEmpty()) this else render.get(*keys.sliceArray(1 until keys.size))
+        if (keys.isEmpty()) this else render.get(*keys.sliceArray(1 until keys.size))
 }

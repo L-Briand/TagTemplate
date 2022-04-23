@@ -4,8 +4,8 @@ plugins {
     application
 }
 
-group = rootProject.property("group") as String
-version = rootProject.property("libVersion") as String
+group = rootProject.property("GROUP") as String
+version = rootProject.property("VERSION_NAME") as String
 val main = "${project.group}.sample.Main"
 
 application {
@@ -24,7 +24,6 @@ tasks.withType<JavaCompile>().all {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
     implementation(project(":lib"))
 }
 

@@ -1,4 +1,4 @@
-package net.orandja.templator
+package net.orandja.tt
 
 import kotlin.reflect.full.memberProperties
 

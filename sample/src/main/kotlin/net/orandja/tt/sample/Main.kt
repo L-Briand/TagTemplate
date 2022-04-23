@@ -1,11 +1,10 @@
-package net.orandja.templator.sample
+package net.orandja.tt.sample
 
-import net.orandja.templator.TT
-import net.orandja.templator.asGroup
-import net.orandja.templator.asRoll
-import net.orandja.templator.asTemplateRender
-import net.orandja.templator.renderToString
-
+import net.orandja.tt.TT
+import net.orandja.tt.asGroup
+import net.orandja.tt.asRoll
+import net.orandja.tt.asTemplateRender
+import net.orandja.tt.renderToString
 
 class Main : Runnable {
     companion object {
@@ -50,7 +49,7 @@ class Main : Runnable {
             )
         }
 
-        println(templates.get("user3"))
-        println(templates.renderToString("user3"))
+        println(templates.get("users3"))
+        println(templates.renderToString("users3"))
     }
 }

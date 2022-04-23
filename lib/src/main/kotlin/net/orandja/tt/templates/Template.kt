@@ -1,9 +1,8 @@
-package net.orandja.templator.tt
+package net.orandja.tt.templates
 
-import net.orandja.templator.Delimiters
-import net.orandja.templator.TemplateRenderer
-import net.orandja.templator.tt.Template.Range.Type.TAG
-import net.orandja.templator.tt.Template.Range.Type.TEXT
+import net.orandja.tt.TemplateRenderer
+import net.orandja.tt.templates.Template.Range.Type.TAG
+import net.orandja.tt.templates.Template.Range.Type.TEXT
 
 class Template(
     private val raw: CharSequence,
@@ -68,4 +67,3 @@ class Template(
 
     override fun toString(): String = "T'$raw'"
 }
-

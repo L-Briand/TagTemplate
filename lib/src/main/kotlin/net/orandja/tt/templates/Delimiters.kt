@@ -1,4 +1,4 @@
-package net.orandja.templator
+package net.orandja.tt.templates
 
 data class Delimiters(
     val start: CharSequence = "{{",

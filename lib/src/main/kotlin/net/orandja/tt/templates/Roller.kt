@@ -1,6 +1,6 @@
-package net.orandja.templator.tt
+package net.orandja.tt.templates
 
-import net.orandja.templator.TemplateRenderer
+import net.orandja.tt.TemplateRenderer
 
 class Roller(
     private vararg val renders: TemplateRenderer
@@ -20,5 +20,5 @@ class Roller(
         }
 
     override fun get(vararg keys: String?): TemplateRenderer =
-        if(keys.isEmpty()) this else renders[keys[0]!!.toInt()].get(*keys.sliceArray(1 until keys.size))
+        if (keys.isEmpty()) this else renders[keys[0]!!.toInt()].get(*keys.sliceArray(1 until keys.size))
 }

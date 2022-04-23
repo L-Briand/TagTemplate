@@ -1,11 +1,12 @@
-package net.orandja.templator
+package net.orandja.tt
 
-import net.orandja.templator.tt.ContextSwitcher
-import net.orandja.templator.tt.Group
-import net.orandja.templator.tt.Repeater
-import net.orandja.templator.tt.Roller
-import net.orandja.templator.tt.Template
-import net.orandja.templator.tt.Value
+import net.orandja.tt.templates.ContextSwitcher
+import net.orandja.tt.templates.Delimiters
+import net.orandja.tt.templates.Group
+import net.orandja.tt.templates.Repeater
+import net.orandja.tt.templates.Roller
+import net.orandja.tt.templates.Template
+import net.orandja.tt.templates.Value
 
 object TT {
     @JvmStatic

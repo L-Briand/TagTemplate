@@ -1,6 +1,6 @@
-package net.orandja.templator.tt
+package net.orandja.tt.templates
 
-import net.orandja.templator.TemplateRenderer
+import net.orandja.tt.TemplateRenderer
 
 class Value(
     private val value: CharSequence
