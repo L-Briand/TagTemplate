@@ -16,6 +16,11 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
     kotlinOptions { jvmTarget = "11" }
 }
 
+tasks.withType<JavaCompile>().all {
+    sourceCompatibility = JavaVersion.VERSION_11.toString()
+    targetCompatibility = JavaVersion.VERSION_11.toString()
+}
+
 // KtLint configuration
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     disabledRules.set(setOf("no-wildcard-imports"))
