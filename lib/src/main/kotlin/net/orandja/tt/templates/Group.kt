@@ -1,16 +1,26 @@
 package net.orandja.tt.templates
 
+import net.orandja.tt.TemplateProvider
 import net.orandja.tt.TemplateRenderer
+import net.orandja.tt.asTemplateProvider
 
 class Group(
-    private val renders: Map<String, TemplateRenderer>
-) : TemplateRenderer {
+    private val provider: TemplateProvider
+) : TemplateRenderer() {
+
+    constructor(map: Map<String, TemplateRenderer>) : this(map.asTemplateProvider())
+
     override fun toString(): String =
-        "group { ${renders.entries.joinToString { "${it.key}:${it.value}" }} }"
+        "group { ${provider.keys().joinToString { "$it:${provider[it]}" }} }"
 
-    override suspend fun render(key: String?, context: TemplateRenderer, onNew: (CharSequence) -> Unit): Boolean =
-        renders[key]?.render(null, context, onNew) ?: false
+    override suspend fun render(
+        key: String?,
+        contexts: Array<TemplateRenderer>,
+        onNew: (CharSequence) -> Unit
+    ): Boolean = key?.let(provider::get)?.render(null, mergeContexts(contexts), onNew) ?: false
 
-    override fun get(vararg keys: String?): TemplateRenderer =
-        if (keys.isEmpty()) this else renders[keys[0]]!!.get(*keys.sliceArray(1 until keys.size))
+    override fun clone(): TemplateRenderer = Group(provider.clone())
+
+    override suspend fun validateTag(key: String): Boolean = provider.keys().contains(key)
+    override fun getExternalTemplate(key: String): TemplateRenderer? = provider[key] ?: context?.get(key)
 }

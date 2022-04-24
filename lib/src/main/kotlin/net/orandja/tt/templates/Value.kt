@@ -4,12 +4,24 @@ import net.orandja.tt.TemplateRenderer
 
 class Value(
     private val value: CharSequence
-) : TemplateRenderer {
-    override fun toString(): String = "V'$value'"
-    override suspend fun render(key: String?, context: TemplateRenderer, onNew: (CharSequence) -> Unit): Boolean {
+) : TemplateRenderer() {
+
+    override suspend fun render(
+        key: String?,
+        contexts: Array<TemplateRenderer>,
+        onNew: (CharSequence) -> Unit
+    ): Boolean {
         onNew(value)
         return true
     }
 
-    override fun get(vararg keys: String?): TemplateRenderer = this
+    override fun clone(): TemplateRenderer = this
+
+    override suspend fun validateTag(key: String): Boolean = false
+
+    override var context: TemplateRenderer?
+        get() = null
+        set(value) { throw IllegalStateException("Value template's context should not be set") }
+
+    override fun toString(): String = "V'$value'"
 }

@@ -1,6 +1,5 @@
 package net.orandja.tt
 
-import net.orandja.tt.templates.ContextSwitcher
 import net.orandja.tt.templates.Delimiters
 import net.orandja.tt.templates.Group
 import net.orandja.tt.templates.Repeater
@@ -29,7 +28,4 @@ object TT {
 
     @JvmStatic
     fun roll(vararg render: TemplateRenderer) = Roller(*render)
-
-    @JvmStatic
-    fun onContext(render: TemplateRenderer, context: TemplateRenderer) = ContextSwitcher(render, context)
 }

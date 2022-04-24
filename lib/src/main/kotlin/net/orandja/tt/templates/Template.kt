@@ -6,8 +6,8 @@ import net.orandja.tt.templates.Template.Range.Type.TEXT
 
 class Template(
     private val raw: CharSequence,
-    delimiters: Delimiters = Delimiters(),
-) : TemplateRenderer {
+    private val delimiters: Delimiters = Delimiters(),
+) : TemplateRenderer() {
 
     // This is more efficient than a sealed class.
     private data class Range(val type: Type, val from: Int, val to: Int) {
@@ -48,22 +48,28 @@ class Template(
 
     override suspend fun render(
         key: String?,
-        context: TemplateRenderer,
+        contexts: Array<TemplateRenderer>,
         onNew: (CharSequence) -> Unit
     ): Boolean {
+        val ctxs = mergeContexts(contexts)
+        // search in context to render the specified key
+        if (key != null) return ctxs.firstOrNull { it.validateTag(key) }?.render(key, ctxs, onNew) ?: false
         for (range in ranges) {
             when (range.type) {
                 TEXT -> onNew(raw.subSequence(range.from, range.to))
                 TAG -> {
-                    val tag = raw.subSequence(range.from, range.to)
-                    context.render(tag.trim().toString(), context, onNew)
+                    val tag = raw.subSequence(range.from, range.to).trim().toString()
+                    val renderer = ctxs.firstOrNull { it.validateTag(tag) }
+                        ?: throw IllegalStateException("{{ $tag }} not found")
+                    renderer.render(tag, ctxs, onNew)
                 }
             }
         }
         return true
     }
 
-    override fun get(vararg keys: String?): TemplateRenderer = this
+    override fun clone(): TemplateRenderer = Template(raw, delimiters)
+    override suspend fun validateTag(key: String): Boolean = false
 
     override fun toString(): String = "T'$raw'"
 }
