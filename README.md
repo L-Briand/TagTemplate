@@ -40,7 +40,7 @@ With reflection, it's even more easy.
 data class Person(val firstName: String, val lastName: String)
 val user = Person("John", "Cena")
 val template = TT.template("Hello {{ firstName }} {{ lastName }} !")
-val userTemplate = user.astemplate(template)
+val userTemplate = template bindToData user
 userTemplate.renderToString() // Hello John Cena !
 ```
 
@@ -49,6 +49,6 @@ Reflection also works with lists.
 ```kotlin
 val users = listOf(Person("John", "Cena"), Person("Carl", "Bert"))
 val template = TT.template("<li>{{ firstName }} {{ lastName }}</li>")
-val usersTemplate = users.asTemplate(template)
+val usersTemplate = template bindToList users
 userTemplate.renderToString() // <li>John Cena</li><li>Carl Bert</li>
 ```
