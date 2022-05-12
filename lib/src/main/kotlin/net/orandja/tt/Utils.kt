@@ -10,13 +10,11 @@ inline fun <reified T> Map<String, T>.asValues() = entries.associate {
     it.key to TT.value(it.value.toString())
 }
 
-inline fun <reified T : Any> T.asGroup() = TT.group(reflectMap().asValues())
-inline fun <reified T : Any> List<T>.asRoll() = TT.roll(map { it.asGroup() })
+inline fun <reified T : Any> T.asKeyValueGroup() = TT.group(reflectMap().asValues())
+inline fun <reified T : Any> List<T>.asRoll() = TT.roll(map { it.asKeyValueGroup() })
 
-/** Transform any class into a renderer */
-inline fun <reified T : Any> T.asTemplate(template: TemplateRenderer) =
-    template.clone() bindTo asGroup()
+inline infix fun <reified T : Any> TemplateRenderer.bindToData(data: T) =
+    clone() bindTo data.asKeyValueGroup()
 
-/** Transform any List into a renderer */
-inline fun <reified T : Any> List<T>.asTemplate(template: TemplateRenderer) =
-    TT.repeat(size, template) bindTo asRoll()
+inline infix fun <reified T : Any> TemplateRenderer.bindToList(data: List<T>) =
+    TT.repeat(data.size, this) bindTo data.asRoll()
