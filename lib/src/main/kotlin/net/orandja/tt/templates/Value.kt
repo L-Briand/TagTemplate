@@ -15,7 +15,7 @@ class Value(
         return true
     }
 
-    override fun clone(): TemplateRenderer = this
+    override fun duplicate(): TemplateRenderer = this
 
     override suspend fun validateTag(key: String): Boolean = false
 

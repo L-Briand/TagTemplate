@@ -27,8 +27,8 @@ fun basic2() {
         "lastName" to TT.value("Auston"),
     )
 
-    // When cloning a template, you do not clone its context
-    val template3 = template2.clone()
+    // When duplicating a template, you do not clone its context
+    val template3 = template2.duplicate()
     val error = try {
         template3.renderToString()
     } catch (e: IllegalStateException) {

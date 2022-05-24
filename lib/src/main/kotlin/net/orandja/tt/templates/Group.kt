@@ -19,7 +19,7 @@ class Group(
         onNew: (CharSequence) -> Unit
     ): Boolean = key?.let(provider::get)?.render(null, mergeContexts(contexts), onNew) ?: false
 
-    override fun clone(): TemplateRenderer = Group(provider.clone())
+    override fun duplicate(): TemplateRenderer = Group(provider.clone())
 
     override suspend fun validateTag(key: String): Boolean = provider.keys().contains(key)
     override fun getExternalTemplate(key: String): TemplateRenderer? = provider[key] ?: context?.get(key)

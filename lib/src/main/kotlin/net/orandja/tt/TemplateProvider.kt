@@ -11,5 +11,5 @@ fun Map<String, TemplateRenderer>.asTemplateProvider(): TemplateProvider = objec
     override fun get(key: String?): TemplateRenderer? = backing[key]
     override fun keys(): Set<String> = backing.keys
     override fun clone(): TemplateProvider =
-        backing.entries.associate { it.key to it.value.clone() }.asTemplateProvider()
+        backing.entries.associate { it.key to it.value.duplicate() }.asTemplateProvider()
 }

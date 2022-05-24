@@ -6,7 +6,7 @@ import net.orandja.tt.templates.Template.Range.Type.TEXT
 
 class Template(
     private val raw: CharSequence,
-    private val delimiters: Delimiters = Delimiters(),
+    private val delimiters: Delimiters = Delimiters.DEFAULT_BLOCK,
 ) : TemplateRenderer() {
 
     // This is more efficient than a sealed class.
@@ -68,7 +68,7 @@ class Template(
         return true
     }
 
-    override fun clone(): TemplateRenderer = Template(raw, delimiters)
+    override fun duplicate(): TemplateRenderer = Template(raw, delimiters)
     override suspend fun validateTag(key: String): Boolean = false
 
     override fun toString(): String = "T'$raw'"
