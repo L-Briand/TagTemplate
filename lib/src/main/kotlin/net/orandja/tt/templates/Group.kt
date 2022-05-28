@@ -5,7 +5,7 @@ import net.orandja.tt.TemplateRenderer
 import net.orandja.tt.asTemplateProvider
 
 class Group(
-    private val provider: TemplateProvider
+    val provider: TemplateProvider
 ) : TemplateRenderer() {
 
     constructor(map: Map<String, TemplateRenderer>) : this(map.asTemplateProvider())
@@ -19,7 +19,7 @@ class Group(
         onNew: (CharSequence) -> Unit
     ): Boolean = key?.let(provider::get)?.render(null, mergeContexts(contexts), onNew) ?: false
 
-    override fun duplicate(): TemplateRenderer = Group(provider.clone())
+    override fun duplicate(): TemplateRenderer = Group(provider.duplicate())
 
     override suspend fun validateTag(key: String): Boolean = provider.keys().contains(key)
     override fun getExternalTemplate(key: String): TemplateRenderer? = provider[key] ?: context?.get(key)

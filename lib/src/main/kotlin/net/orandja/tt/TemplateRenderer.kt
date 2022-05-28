@@ -13,7 +13,7 @@ abstract class TemplateRenderer {
      */
     abstract suspend fun render(key: String?, contexts: Array<TemplateRenderer>, onNew: (CharSequence) -> Unit): Boolean
 
-    /** Clone the template */
+    /** Duplicate the template */
     abstract fun duplicate(): TemplateRenderer
 
     /** Verify that a tag can be renderer with this template */

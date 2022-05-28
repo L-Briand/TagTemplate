@@ -17,8 +17,8 @@ fun basic1() {
     val delimiters = Delimiters("[[", "]]")
     val template2 = TT.template("[[ lastName ]] - [[ firstName ]]", delimiters)
 
-    // You can create a group containing everything to render your template.
-    val templates = TT.group(
+    // With TT.templates you can create a group containing everything you need.
+    val templates = TT.templates(
         "userTemplate" to TT.template("{{ lastName }} - {{ firstName }}"),
         "firstName" to TT.value("Sherill"),
         "lastName" to TT.value("Auston"),

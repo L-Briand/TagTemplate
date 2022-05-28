@@ -3,6 +3,7 @@ package net.orandja.tt.block
 import net.orandja.tt.block.BlockParser.Anchor.*
 import net.orandja.tt.templates.Delimiters
 
+/** Parse a file containing blocks */
 object BlockParser {
 
     @JvmStatic
@@ -14,11 +15,12 @@ object BlockParser {
     }
 
     private enum class Anchor { UP, DOWN }
-    private data class PreTemplate(
+    private data class PreBlock(
         val content: StringBuilder = StringBuilder(),
-        val children: MutableList<PreTemplate> = mutableListOf(),
+        val children: MutableList<PreBlock> = mutableListOf(),
     ) {
-        override fun toString(): String = "C'${content}'${if (children.isNotEmpty()) "[${children.joinToString { it.toString() }}]" else ""}"
+        override fun toString(): String =
+            "C'${content}'${if (children.isNotEmpty()) "[${children.joinToString { it.toString() }}]" else ""}"
     }
 
     private fun assertValidity(anchors: List<Pair<Int, Anchor>>, delimiters: Delimiters) {
@@ -65,19 +67,38 @@ object BlockParser {
         return anchors
     }
 
-    private fun createTree(content: CharSequence, anchors: List<Pair<Int, Anchor>>, delimiters: Delimiters): PreTemplate {
-        val root = PreTemplate()
+    private val lineSeparator = System.lineSeparator()
+    private fun isLineSeparator(on: CharSequence, at: Int): Boolean {
+        if (at + lineSeparator.length >= on.length) return false
+        for (i in lineSeparator.indices) {
+            if (lineSeparator[i] != on[at]) return false
+        }
+        return true
+    }
+
+    private fun createTree(content: CharSequence, anchors: List<Pair<Int, Anchor>>, delimiters: Delimiters): PreBlock {
+        val root = PreBlock()
         val stack = mutableListOf(root)
         var last = 0 to UP
         for (anchor in anchors) {
             when (anchor.second) {
                 UP -> {
                     val parent = stack.last()
-                    val next = PreTemplate()
+                    val next = PreBlock()
                     parent.children += next
                     stack.add(next)
                     val part = content.substring(last.first, anchor.first - delimiters.start.length)
-                    parent.content.append(part)
+                    var end = part.length
+                    for (idx in part.indices.reversed()) {
+                        if (part[idx].isWhitespace()) {
+                            if (isLineSeparator(part, idx)) {
+                                end = idx
+                            }
+                        } else break
+                    }
+
+                    if (end == part.length) parent.content.append(part)
+                    else parent.content.append(part.substring(0, end))
                 }
                 DOWN -> {
                     val current = stack.last()
@@ -97,10 +118,10 @@ object BlockParser {
         var startOfFirstWord = -1
         var endOfFirstWord = -1
         var startOfSecondWord = -1
-        val separator = System.lineSeparator()
+
         for (i in indices) {
             if (endOfFirstWord > 0) {
-                if (!get(i).isWhitespace() || get(i) == '\n' || get(i) == '\r') {
+                if (!get(i).isWhitespace() || isLineSeparator(this, i)) {
                     startOfSecondWord = i
                     break
                 }
@@ -124,7 +145,7 @@ object BlockParser {
         return firstWord to startOfSecondWord
     }
 
-    private fun blockFromTree(tree: PreTemplate, cut: Int = 0): Block {
+    private fun blockFromTree(tree: PreBlock, cut: Int = 0): Block {
         val templateContent = if (cut > 0) tree.content.substring(cut) else tree.content
         val templateInfo = templateContent.toString().trimIndent()
         if (tree.children.size == 0) return Block(templateInfo)

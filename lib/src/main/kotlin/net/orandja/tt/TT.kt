@@ -11,16 +11,21 @@ import net.orandja.tt.templates.Value
 class TT {
     companion object {
         @JvmStatic
-        fun template(template: CharSequence, delimiters: Delimiters = Delimiters.DEFAULT_TEMPLATE) = Template(template, delimiters)
+        fun template(template: CharSequence, delimiters: Delimiters = Delimiters.DEFAULT_TEMPLATE) =
+            Template(template, delimiters)
 
         @JvmStatic
         fun value(value: CharSequence) = Value(value)
 
         @JvmStatic
-        fun group(vararg renders: Pair<String, TemplateRenderer>) = group(renders.toMap())
+        fun values(vararg values: Pair<String, String>) =
+            templates(values.associate { it.first to value(it.second) })
 
         @JvmStatic
-        fun group(renders: Map<String, TemplateRenderer>) = Group(renders)
+        fun templates(vararg renders: Pair<String, TemplateRenderer>) = templates(renders.toMap())
+
+        @JvmStatic
+        fun templates(renders: Map<String, TemplateRenderer>) = Group(renders)
 
         @JvmStatic
         fun repeat(times: Int, render: TemplateRenderer) = Repeater(times, render)
@@ -37,9 +42,47 @@ class TT {
             list(on, *((elements as? List<TemplateRenderer>) ?: elements.toList()).toTypedArray())
 
         @JvmStatic
-        fun list(on: TemplateRenderer, vararg elements: TemplateRenderer) = repeat(elements.size, on) bindTo roll(*elements)
+        fun list(on: TemplateRenderer, vararg elements: TemplateRenderer) =
+            repeat(elements.size, on) bindTo roll(*elements)
 
         @JvmStatic
-        fun block(block: CharSequence, delimiters: Delimiters = Delimiters.DEFAULT_BLOCK) = BlockParser.parseBlock(block, delimiters)
+        fun block(block: CharSequence, delimiters: Delimiters = Delimiters.DEFAULT_BLOCK) =
+            BlockParser.parseBlock(block, delimiters)
+
+        @JvmStatic
+        fun templatesFromBlock(
+            block: CharSequence,
+            separator: String = Delimiters.DEFAULT_SEPARATOR,
+            blockDelimiter: Delimiters = Delimiters.DEFAULT_BLOCK,
+            templateDelimiter: Delimiters = Delimiters.DEFAULT_TEMPLATE
+        ): TemplateRenderer = templates(block(block, blockDelimiter).asTemplateMap(separator, templateDelimiter))
+
+        @JvmStatic
+        fun merge(
+            vararg templates: Pair<String, Map<String, TemplateRenderer>>,
+            separator: String = Delimiters.DEFAULT_MERGE_SEPARATOR
+        ): Map<String, TemplateRenderer> = templates.fold(mutableMapOf()) { acc, pair ->
+            pair.second.forEach {
+                acc["${pair.first}$separator${it.key}"] = it.value
+            }
+            acc
+        }
+
+        @JvmStatic
+        fun merge(
+            vararg templates: Pair<String, TemplateRenderer>,
+            separator: String = Delimiters.DEFAULT_MERGE_SEPARATOR
+        ): TemplateRenderer {
+            val new = templates.fold(mutableMapOf<String, TemplateRenderer>()) { acc, pair ->
+                val template = pair.second
+                if (template is Group)
+                    template.provider.keys().forEach {
+                        acc["${pair.first}$separator$it"] = template[it]!!
+                    }
+                else acc["${pair.first}$separator"] = template
+                acc
+            }
+            return templates(new)
+        }
     }
 }

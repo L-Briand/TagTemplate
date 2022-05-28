@@ -7,6 +7,7 @@ import net.orandja.tt.renderToString
 
 fun list3() {
     // See reflection1
+    // Given :
     val user1Group = UserInformation("Auston", "Sherill").toKeyValueGroup()
     val user2Group = UserInformation("Marinda", "Abbi").toKeyValueGroup()
     val userTemplate = TT.template("( {{ lastName }} - {{ firstName }} ),")
@@ -19,12 +20,13 @@ fun list3() {
     val template2 = TT.repeat(2, userTemplate) bindTo TT.roll(user1Group, user2Group)
     assertEqual("( Auston - Sherill ),( Marinda - Abbi ),", template2.renderToString())
 
-    // This combination trigger a particular roll behavior.
+    // As explained in List2, rolls are done with keys in mind but this combination
+    // (repeat bindTo roll) triggers a particular roll behavior.
     // The roll renders now by block and not by keys.
     // You can freely use multiple times the same key and have the correct result.
     val userTemplate2 = TT.template("( {{ lastName }} - {{ lastName }} ),")
     val template3 = TT.repeat(2, userTemplate2) bindTo TT.roll(user1Group, user2Group)
     assertEqual("( Auston - Auston ),( Marinda - Marinda ),", template3.renderToString())
 
-    // See Reflection2 for a more consise way to do that
+    // See Reflection2 for a more concise way to do that
 }
