@@ -1,6 +1,6 @@
 # TT
 
-A basic template processor.
+A basic template processor written in kotlin.
 
 ## implementation
 
@@ -14,7 +14,7 @@ dependencies {
 
 ## Usage
 
-For an exhaustive list of things that can be done, look at all the [samples](./sample/src/main/kotlin/net/orandja/tt/sample).
+**To learn more please, take a look at all [samples](./sample/src/main/kotlin/net/orandja/tt/sample).**
 
 A simple usage :
 
@@ -23,32 +23,32 @@ A simple usage :
 val template = TT.template("Hello {{ firstName }} {{ lastName }} !")
 // Create a group containing all information needed to render.
 val context = TT.group(
-    "firstName" to TT.value("John"),
-    "lastName" to TT.value("Cena"),
+    "firstName" to TT.value("It's me"),
+    "lastName" to TT.value("Mario"),
 )
 
 // bind them together
 template bindTo context
 
 // render it.
-template.renderToString() // Hello John Cena !
+template.renderToString() // Hello It's me Mario !
 ```
 
-With reflection, it's even more easy.
+With reflection, it's even easier.
 
 ```kotlin
 data class Person(val firstName: String, val lastName: String)
-val user = Person("John", "Cena")
+val user = Person("Mario", "Smith")
 val template = TT.template("Hello {{ firstName }} {{ lastName }} !")
 val userTemplate = template bindToData user
-userTemplate.renderToString() // Hello John Cena !
+userTemplate.renderToString() // Hello Mario Smith !
 ```
 
 Reflection also works with lists.
 
 ```kotlin
-val users = listOf(Person("John", "Cena"), Person("Carl", "Bert"))
+val users = listOf(Person("Mario", "Smith"), Person("Luigi", "Smith"))
 val template = TT.template("<li>{{ firstName }} {{ lastName }}</li>")
-val usersTemplate = template bindToList users
-userTemplate.renderToString() // <li>John Cena</li><li>Carl Bert</li>
+val usersTemplate = template bindToDataList users
+userTemplate.renderToString() // <li>Mario Smith</li><li>Luigi Smith</li>
 ```

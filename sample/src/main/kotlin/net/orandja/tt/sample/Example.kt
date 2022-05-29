@@ -74,7 +74,7 @@ fun example() {
                 There is 3 things to do : 
             <p>
             <ul>
-            <li> Star the project. </li>
+            <li> Star the project ? </li>
             <li> Try to use it inside your projects. </li>
             <li> Maybe helps the project by contributing ! </li>
             </ul>
