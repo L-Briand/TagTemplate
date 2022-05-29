@@ -13,8 +13,8 @@ abstract class TemplateRenderer {
      */
     abstract suspend fun render(key: String?, contexts: Array<TemplateRenderer>, onNew: (CharSequence) -> Unit): Boolean
 
-    /** Clone the template */
-    abstract fun clone(): TemplateRenderer
+    /** Duplicate the template */
+    abstract fun duplicate(): TemplateRenderer
 
     /** Verify that a tag can be renderer with this template */
     abstract suspend fun validateTag(key: String): Boolean
@@ -23,8 +23,12 @@ abstract class TemplateRenderer {
     infix fun bindTo(context: TemplateRenderer?) = apply { this.context = context }
 
     /** Allow for depth getter of template */
-    open fun get(vararg keys: String?): TemplateRenderer? =
-        if (keys.isEmpty()) this else keys[0]?.let(::getExternalTemplate)?.get(*keys.sliceArray(1 until keys.size))
+    open operator fun get(vararg keys: String?): TemplateRenderer? {
+        val result =
+            if (keys.isEmpty()) this
+            else keys[0]?.let(::getExternalTemplate)?.get(*keys.sliceArray(1 until keys.size))
+        return result?.duplicate()
+    }
 
     protected open fun getExternalTemplate(key: String): TemplateRenderer? = context?.get(key)
 

@@ -1,50 +1,51 @@
 package net.orandja.tt.sample
 
-import net.orandja.tt.TT
-import net.orandja.tt.asKeyValueGroup
-import net.orandja.tt.assertEqual
-import net.orandja.tt.renderToString
+import net.orandja.tt.*
 
 fun list1() {
-    val user1 = UserInformation("Auston", "Sherill")
-    val user2 = UserInformation("Marinda", "Abbi")
-    val user1Group = user1.asKeyValueGroup() // See reflection1
-    val user2Group = user2.asKeyValueGroup() // See reflection1
-    val userTemplate = TT.template("( {{ lastName }} - {{ firstName }} ),")
+    // Given :
+    val names = listOf("Sherill", "Abbi", "Sheila")
 
-    // You can roll elements on a template to make it dynamic.
-    // By calling multiple times the same template, it will iterate over keys
-    val templates = userTemplate bindTo TT.group(
-        "firstName" to TT.roll(TT.value(user1.firstName), TT.value(user2.firstName)),
-        "lastName" to TT.roll(TT.value(user1.lastName), TT.value(user2.lastName)),
-    )
+    // The TT system is dumb, it only map tags to values.
+    // To create a list you have to create something that produce multiple items behind a tag.
 
-    // Rendering firstName multiples times yield different result.
-    assertEqual("Sherill", templates.renderToString("firstName"))
-    assertEqual("Abbi", templates.renderToString("firstName"))
+    // Let say you want a list of elements in html and an element looks like this :
+    val itemTemplate = TT.template("<li>{{ name }}</li>")
 
-    // Same goes with a whole template.
-    assertEqual("( Auston - Sherill ),", templates.renderToString())
-    assertEqual("( Marinda - Abbi ),", templates.renderToString())
+    // First we have to make a list of templateRenderers that can render the data
+    val nameAsTTValue = names.map { TT.value(it) }
+    assertEqual("Sherill", nameAsTTValue[0].renderToString())
+    assertEqual("Abbi", nameAsTTValue[1].renderToString())
 
-    // You can roll any TT (template, value, group, roll, repeat)
-    val usersRoll = TT.roll(user1Group, user2Group)
+    // Then we need to hide it behind the tag "name" in order to make it usable for itemTemplate.
+    val nameBehindTagName = nameAsTTValue.map { TT.templates("name" to it) }
+    assertEqual("Sherill", nameBehindTagName[0].renderToString("name"))
+    assertEqual("Abbi", nameBehindTagName[1].renderToString("name"))
 
-    val template = userTemplate bindTo usersRoll
-    // The roll is done on two groups instead of 2x2 template value
-    // The keys are rolled just fine.
-    assertEqual("( Auston - Sherill ),", template.renderToString())
-    assertEqual("( Marinda - Abbi ),", template.renderToString())
+    // Finally, we can assemble the list with the main template with TT.list
+    val elements = TT.list(on = itemTemplate, elements = nameBehindTagName)
+    // This newly created template can be rendered and print multiple elements
+    assertEqual("<li>Sherill</li><li>Abbi</li><li>Sheila</li>", elements.renderToString())
 
-    // As said previously.
-    // Internally it rolls on keys and not on group of elements.
-    // Changing template in the middle of a roll can make things strange.
-    // If the same roll is used for two different template it might create bugs.
-    val onlyFirstName = TT.template("{{firstName}}").bindTo(usersRoll)
-    assertEqual("Sherill", onlyFirstName.renderToString())
-    assertEqual("( Auston - Abbi ),", template.renderToString()) // lastName from user1 firstName from user2
-    // In the second prints it takes the first lastName and the second firstName
-    // since the first firstName has already been used.
+    // To keep a coherent naming, you can also use bindToList instead of TT.list
+    val elements2 = itemTemplate bindToList nameBehindTagName
+    assertEqual("<li>Sherill</li><li>Abbi</li><li>Sheila</li>", elements2.renderToString())
 
-    // Note : As you have may notice rolls loops over.
+    // To create your value template with any iterator<T> where T.toString() is the value you want to print
+    // You can use makeTemplateValue("key")
+    val nameBehindTagName2 = names.makeTemplateValue("name")
+    // If your data is a bit more complex, let say multiple fields
+    // You can use makeTemplate("key") { /* create a group here */ }
+    val users = listOf("Will" to "Smith", "Brad" to "pitt")
+    val groupBehindTag = users.makeTemplate("user") {
+        TT.values(
+            "firstName" to it.first,
+            "lastName" to it.second,
+        )
+    }
+
+    // Now we can encapsulate this into an ul element.
+    val listTemplate = TT.template("<ul>{{ items }}</ul>") bindTo TT.templates("items" to elements)
+    // And render it
+    assertEqual("<ul><li>Sherill</li><li>Abbi</li><li>Sheila</li></ul>", listTemplate.renderToString())
 }

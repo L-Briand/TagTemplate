@@ -11,10 +11,10 @@ fun basic3() {
 
     // Maybe this template is used somewhere else.
     // "name" is still not defined.
-    val tt2 = TT.template("Hello {{ person_greeting }} !") bindTo TT.group("person_greeting" to tt1)
+    val tt2 = TT.template("Hello {{ person_greeting }} !") bindTo TT.templates("person_greeting" to tt1)
 
     // And then we finally define it.
-    val tt3 = TT.group(
+    val tt3 = TT.templates(
         "hello" to tt2,
         "name" to TT.value("mike"),
     )
@@ -27,17 +27,18 @@ fun basic3() {
     } catch (e: IllegalStateException) {
         e.message
     }
-    assertEqual("{{ name }} not found", error)
+    assertEqual("tag {{ name }} not found", error)
 
-    // A bind has priority over a tag defined in an upper layer.
-    // Here we force the person template to have a fixed name.
-    tt1 bindTo TT.group("name" to TT.value("jon"))
+    // If the tag is already set on a lower template it has priority
+    // over a tag defined in an upper layer. Here we force the person
+    // template to have a fixed name.
+    tt1 bindTo TT.templates("name" to TT.value("jon"))
     assertEqual("Hello i'm jon !", tt3.renderToString("hello"))
 
-    // Finally, the most near-by tag in the depth tree is always used.
+    // To sum up, the most near-by tag in the depth tree is always used.
     // if we set a name in-between, (on tt2) it will use its value instead of tt3 value
     tt1 bindTo null
-    tt2 bindTo TT.group(
+    tt2 bindTo TT.templates(
         "person_greeting" to tt1,
         "name" to TT.value("elvis"),
     )

@@ -12,9 +12,18 @@ class Repeater(
         key: String?,
         contexts: Array<TemplateRenderer>,
         onNew: (CharSequence) -> Unit
-    ): Boolean = (0 until times).all { backing.render(key, mergeContexts(contexts), onNew) }
+    ): Boolean = (0 until times).all {
+        backing.render(key, mergeContexts(contexts), onNew)
+            .also { (context as? Roller)?.increment() }
+    }
 
-    override fun clone(): TemplateRenderer = Repeater(times, backing.clone())
+    override var context: TemplateRenderer? = null
+        set(value) {
+            if (value is Roller) value.autoRoll = false
+            field = value
+        }
+
+    override fun duplicate(): TemplateRenderer = Repeater(times, backing.duplicate())
     override suspend fun validateTag(key: String): Boolean = backing.validateTag(key)
     override fun get(vararg keys: String?): TemplateRenderer? = backing.get(*keys)
 }
