@@ -80,6 +80,7 @@ fun example() {
             </ul>
             </body>
             </html>
-        """.trimIndent(), result
+        """.trimIndent(),
+        result
     )
 }

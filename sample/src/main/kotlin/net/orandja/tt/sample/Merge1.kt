@@ -40,5 +40,4 @@ fun merge1() {
     )
     assertEqual("This is a table", renderer.renderToString("main/"))
     assertEqual("a table", renderer.renderToString("component/name"))
-
 }

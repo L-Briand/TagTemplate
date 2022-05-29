@@ -20,7 +20,7 @@ object BlockParser {
         val children: MutableList<PreBlock> = mutableListOf(),
     ) {
         override fun toString(): String =
-            "C'${content}'${if (children.isNotEmpty()) "[${children.joinToString { it.toString() }}]" else ""}"
+            "C'$content'${if (children.isNotEmpty()) "[${children.joinToString { it.toString() }}]" else ""}"
     }
 
     private fun assertValidity(anchors: List<Pair<Int, Anchor>>, delimiters: Delimiters) {

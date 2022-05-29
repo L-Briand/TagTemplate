@@ -12,7 +12,7 @@ class Group(
 
     override fun toString(): String =
         "group { ${
-            provider.keys().joinToString(prefix = "\n", separator = ",\n", postfix = "\n") { "$it:${provider[it]}" }
+        provider.keys().joinToString(prefix = "\n", separator = ",\n", postfix = "\n") { "$it:${provider[it]}" }
         } }"
 
     override suspend fun render(

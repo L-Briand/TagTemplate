@@ -19,7 +19,7 @@ class Repeater(
 
     override var context: TemplateRenderer? = null
         set(value) {
-            if(value is Roller) value.autoRoll = false
+            if (value is Roller) value.autoRoll = false
             field = value
         }
 

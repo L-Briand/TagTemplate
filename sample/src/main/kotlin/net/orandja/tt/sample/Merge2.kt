@@ -1,7 +1,6 @@
 package net.orandja.tt.sample
 
 import net.orandja.tt.TT
-import net.orandja.tt.TemplateRenderer
 import net.orandja.tt.assertEqual
 import net.orandja.tt.renderToString
 

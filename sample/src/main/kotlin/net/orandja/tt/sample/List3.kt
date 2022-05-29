@@ -1,9 +1,9 @@
 package net.orandja.tt.sample
 
 import net.orandja.tt.TT
-import net.orandja.tt.toKeyValueTemplate
 import net.orandja.tt.assertEqual
 import net.orandja.tt.renderToString
+import net.orandja.tt.toKeyValueTemplate
 
 fun list3() {
     // See reflection1
