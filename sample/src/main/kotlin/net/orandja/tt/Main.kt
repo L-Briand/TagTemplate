@@ -12,45 +12,59 @@ fun assertEqual(expected: Any?, value: Any?) {
 // You should read examples in the same order as below.
 
 fun main() {
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Basic1.kt#L8
     println("\n--- basic1:")
     basic1()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Basic2.kt#L7
     println("\n--- basic2:")
     basic2()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Basic3.kt
     println("\n--- basic3:")
     basic3()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/List1.kt#L5
     println("\n--- list1:")
     list1()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Reflection1.kt#L9
     println("\n--- reflection1:")
     reflection1()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/List2.kt#L8
     println("\n--- list2:")
     list2()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/List3.kt#L8
     println("\n--- list3:")
     list3()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Reflection2.kt
     println("\n--- reflection2:")
     reflection2()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Block1.kt
     println("\n--- block1:")
     block1()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Block2.kt
     println("\n--- block2:")
     block2()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Block3.kt
     println("\n--- block3:")
     block3()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Merge1.kt
     println("\n--- merge1:")
     merge1()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Merge2.kt
     println("\n--- merge2:")
     merge2()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Example.kt#L5
     println("\n--- example")
     example()
 }

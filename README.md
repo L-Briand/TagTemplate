@@ -14,7 +14,7 @@ dependencies {
 
 ## Usage
 
-**To learn more please, take a look at all [samples](./sample/src/main/kotlin/net/orandja/tt/sample).**
+**To learn more please, take a look at all [samples](https://github.com/L-Briand/TT/blob/main/sample/src/main/kotlin/net/orandja/tt/Main.kt#L11).**
 
 A simple usage :
 
