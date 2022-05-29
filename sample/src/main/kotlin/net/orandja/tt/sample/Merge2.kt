@@ -19,28 +19,26 @@ fun merge2() {
         """.trimIndent()
     )
 
-    // a different page for mobile and
-    val htmlFile = TT.templatesFromBlock(
+    // a page using this header blocks
+    val htmlFile = TT.template(
         """
-        --{ default
-            <html>
-                <head>
-                    {{ headers/.title }}
-                    {{ headers/.for-mobile }}
-                </head
-                <body>
-                    <h1>{{ title }}</h1>
-                </body>
-            </html>
-        }--
+        <html>
+            <head>
+                {{ headers/.title }}
+                {{ headers/.for-mobile }}
+            </head
+            <body>
+                <h1>{{ title }}</h1>
+            </body>
+        </html>
         """.trimIndent()
     )
 
-    // You can merge Map<String, TemplateRenderer> with the TT.merge function.
+    // You can merge the two blocks with TT.merge function.
     // By default, it prepends the keys of each map with the given name in the pair
     // and add a separator between the name and its sub blocks.
     // The default separator is "/"
-    // Example here: default inside htmlFile == html/.default
+    // here: for-mobile == headers/.for-mobile
     val masterTemplate = TT.merge(
         "html" to htmlFile,
         // the key "headers" is corresponding to the tags used in htmlFile
@@ -61,9 +59,8 @@ fun merge2() {
             </body>
         </html>
         """.trimIndent(),
-        renderer.renderToString("html/.default")
+        renderer.renderToString("html/")
     )
 
-    // With a bit of automation, you can bind files to templates
-    // and create a base group that works for your needs.
+    // All there is for you is to use your imagination to link templates together
 }

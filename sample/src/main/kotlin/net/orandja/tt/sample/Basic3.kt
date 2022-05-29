@@ -29,8 +29,9 @@ fun basic3() {
     }
     assertEqual("tag {{ name }} not found", error)
 
-    // A bind has priority over a tag defined in an upper layer.
-    // Here we force the person template to have a fixed name.
+    // If the tag is already set on a lower template it has priority
+    // over a tag defined in an upper layer. Here we force the person
+    // template to have a fixed name.
     tt1 bindTo TT.templates("name" to TT.value("jon"))
     assertEqual("Hello i'm jon !", tt3.renderToString("hello"))
 

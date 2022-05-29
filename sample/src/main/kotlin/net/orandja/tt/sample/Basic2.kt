@@ -8,16 +8,17 @@ fun basic2() {
     // Given :
     val userTemplate = TT.template("( {{ lastName }} - {{ firstName }} ),")
 
-    // It's possible to bind values and templates on a template without making a flat group.
-    // Now userTemplate is bound to a context.
+    // It's possible to bind a template on any template with "bindTo".
+    // This act as a context for keys to search.
     val template = userTemplate.bindTo(
         TT.templates(
             "firstName" to TT.value("Sherill"),
             "lastName" to TT.value("Auston"),
         )
     )
+    // Now userTemplate is bound to a context with firstName and lastName known.
 
-    // It renders correctly even without specifying a name
+    // It renders correctly without specifying a name because userTemplate do not have a name.
     assertEqual("( Auston - Sherill ),", template.renderToString())
     // And you can still render its underlying information with the context
     assertEqual("Sherill", template.context!!.renderToString("firstName"))

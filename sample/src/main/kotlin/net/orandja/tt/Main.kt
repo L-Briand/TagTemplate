@@ -25,6 +25,6 @@ fun main() {
     println("\n--- block2:"); block2()
     println("\n--- block3:"); block3()
     println("\n--- merge1:"); merge1()
-    //println("\n--- merge2:"); merge2()
+    println("\n--- merge2:"); merge2()
     println("\n--- example"); example()
 }

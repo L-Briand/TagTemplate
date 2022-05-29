@@ -11,7 +11,9 @@ class Group(
     constructor(map: Map<String, TemplateRenderer>) : this(map.asTemplateProvider())
 
     override fun toString(): String =
-        "group { ${provider.keys().joinToString { "$it:${provider[it]}" }} }"
+        "group { ${
+            provider.keys().joinToString(prefix = "\n", separator = ",\n", postfix = "\n") { "$it:${provider[it]}" }
+        } }"
 
     override suspend fun render(
         key: String?,

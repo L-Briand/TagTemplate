@@ -9,8 +9,8 @@ fun example() {
         --{ page
             <!DOCTYPE html>
             <html>
-                <head>{{ head }}</head>
-                <body>{{ body }}</body>
+                <head>{{ .head }}</head>
+                <body>{{ .body }}</body>
             </html>
         }--
         
@@ -42,24 +42,24 @@ fun example() {
     // Given :
     val title = "An interesting title"
     val thingsToDo = listOf(
-        "Star the project.",
+        "Star the project ?",
         "Try to use it inside your projects.",
         "Maybe helps the project by contributing !"
     )
+    val numElements = thingsToDo.size.toString()
 
-    // And draw the template
-    val head = templates[".head"]!! bindTo TT.values("title" to title)
+    // Create template for elements because its dynamic
     val elements = templates[".element"]!! bindToList thingsToDo.makeTemplateValue("name")
-    val body = templates[".body"]!! bindTo TT.templates(
+
+    // Add a context to the whole document
+    templates bindTo TT.templates(
         "title" to TT.value(title),
-        "num_elements" to TT.value(thingsToDo.size.toString()),
         "elements" to elements,
-    )
-    val page = templates[".page"]!! bindTo TT.templates(
-        "head" to head,
-        "body" to body,
+        "num_elements" to TT.value(numElements)
     )
 
+    // render the page
+    val result = templates.renderToString(".page")
     assertEqual(
         """
             <!DOCTYPE html>
@@ -80,7 +80,6 @@ fun example() {
             </ul>
             </body>
             </html>
-        """.trimIndent(),
-        page.renderToString()
+        """.trimIndent(), result
     )
 }

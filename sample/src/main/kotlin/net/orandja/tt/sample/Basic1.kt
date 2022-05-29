@@ -24,7 +24,7 @@ fun basic1() {
         "lastName" to TT.value("Auston"),
     )
 
-    // then you can render anything inside this group
+    // Then you can render anything inside this group
     assertEqual("Auston - Sherill", templates.renderToString("userTemplate"))
     assertEqual("Sherill", templates.renderToString("firstName"))
 }

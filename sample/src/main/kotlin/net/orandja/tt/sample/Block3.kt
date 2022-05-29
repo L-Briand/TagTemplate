@@ -29,15 +29,15 @@ fun block3() {
 
     // By putting all of them inside a group templates now knows each other
     // and one can include another with the appropriated tag
+    // Here .headers refer to the template headers inside the block
 
-    // This group can also be bound to a context, so some tags can be bound
-    // only one time for multiple templates
+    // Also, a group can be bound to a context, so you can bind a tag
+    // for multiple templates in one go.
     templates bindTo TT.values("title" to "MyTitle")
 
-    // Since the root tag is an empty string, it is also transfered to the created template.
-    // To render the root it is required to select the "" key
+    // The generated group of template is the equivalent of a TT.templates("key" to TT.xyz)
+    // So the root block is also behind a key. This key is an empty string.
     val result = templates.renderToString("")
-    // since it's a group, it requires a key to work so '""' is required when selecting the root
     assertEqual(
         """
         <html>

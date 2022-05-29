@@ -59,17 +59,6 @@ class TT {
 
         @JvmStatic
         fun merge(
-            vararg templates: Pair<String, Map<String, TemplateRenderer>>,
-            separator: String = Delimiters.DEFAULT_MERGE_SEPARATOR
-        ): Map<String, TemplateRenderer> = templates.fold(mutableMapOf()) { acc, pair ->
-            pair.second.forEach {
-                acc["${pair.first}$separator${it.key}"] = it.value
-            }
-            acc
-        }
-
-        @JvmStatic
-        fun merge(
             vararg templates: Pair<String, TemplateRenderer>,
             separator: String = Delimiters.DEFAULT_MERGE_SEPARATOR
         ): TemplateRenderer {
