@@ -24,6 +24,10 @@ fun main() {
     println("\n--- basic3:")
     basic3()
 
+    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Basic4.kt
+    println("\n--- basic4:")
+    basic4()
+
     // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/List1.kt#L5
     println("\n--- list1:")
     list1()

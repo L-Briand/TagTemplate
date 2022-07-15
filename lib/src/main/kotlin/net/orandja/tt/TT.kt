@@ -1,18 +1,21 @@
 package net.orandja.tt
 
 import net.orandja.tt.block.BlockParser
-import net.orandja.tt.templates.Delimiters
-import net.orandja.tt.templates.Group
-import net.orandja.tt.templates.Repeater
-import net.orandja.tt.templates.Roller
-import net.orandja.tt.templates.Template
-import net.orandja.tt.templates.Value
+import net.orandja.tt.templates.*
+import java.io.InputStream
 
 class TT {
     companion object {
         @JvmStatic
         fun template(template: CharSequence, delimiters: Delimiters = Delimiters.DEFAULT_TEMPLATE) =
             Template(template, delimiters)
+
+        @JvmStatic
+        fun templateStream(
+            sourceLastUpdate: () -> Long,
+            source: () -> InputStream,
+            delimiters: Delimiters = Delimiters.DEFAULT_TEMPLATE,
+        ) = TemplateStream(sourceLastUpdate, source, delimiters)
 
         @JvmStatic
         fun value(value: CharSequence) = Value(value)

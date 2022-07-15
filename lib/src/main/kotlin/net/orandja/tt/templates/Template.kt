@@ -1,8 +1,8 @@
 package net.orandja.tt.templates
 
 import net.orandja.tt.TemplateRenderer
-import net.orandja.tt.templates.Template.Range.Type.TAG
-import net.orandja.tt.templates.Template.Range.Type.TEXT
+import net.orandja.tt.templates.Range.Type.TAG
+import net.orandja.tt.templates.Range.Type.TEXT
 
 class Template private constructor(
     private val raw: CharSequence,
@@ -39,11 +39,6 @@ class Template private constructor(
             }
             return Template(raw, updatableRanges.toList())
         }
-    }
-
-    // This is more efficient than a sealed class.
-    data class Range(val type: Type, val from: Int, val to: Int) {
-        enum class Type { TEXT, TAG }
     }
 
     override suspend fun render(
