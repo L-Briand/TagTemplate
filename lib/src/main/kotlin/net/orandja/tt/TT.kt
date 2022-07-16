@@ -21,6 +21,9 @@ class TT {
         fun value(value: CharSequence) = Value(value)
 
         @JvmStatic
+        fun valueStream(source: () -> InputStream) = ValueStream(source)
+
+        @JvmStatic
         fun values(vararg values: Pair<String, String>) =
             templates(values.associate { it.first to value(it.second) })
 

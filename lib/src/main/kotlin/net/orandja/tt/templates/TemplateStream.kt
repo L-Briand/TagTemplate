@@ -99,4 +99,6 @@ class TemplateStream(
         TemplateStream(sourceLastUpdate, source, delimiters, lastModified, ranges)
 
     override suspend fun validateTag(key: String): Boolean = false
+
+    override fun toString(): String = "T'${String(source().readAllBytes())}'"
 }
