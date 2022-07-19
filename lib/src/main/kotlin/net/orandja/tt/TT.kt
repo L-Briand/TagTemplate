@@ -34,6 +34,9 @@ class TT {
         fun templates(renders: Map<String, TemplateRenderer>) = Group(renders)
 
         @JvmStatic
+        fun templates(provider: TemplateProvider) = Group(provider)
+
+        @JvmStatic
         fun repeat(times: Int, render: TemplateRenderer) = Repeater(times, render)
 
         @JvmStatic
@@ -64,9 +67,9 @@ class TT {
         ): TemplateRenderer = templates(block(block, blockDelimiter).asTemplateMap(separator, templateDelimiter))
 
         @JvmStatic
-        fun merge(
+        fun group(
             vararg templates: Pair<String, TemplateRenderer>,
-            separator: String = Delimiters.DEFAULT_MERGE_SEPARATOR
+            separator: String = Delimiters.DEFAULT_GROUP_SEPARATOR
         ): TemplateRenderer {
             val new = templates.fold(mutableMapOf<String, TemplateRenderer>()) { acc, pair ->
                 val template = pair.second
@@ -75,6 +78,21 @@ class TT {
                         acc["${pair.first}$separator$it"] = template[it]!!
                     }
                 else acc["${pair.first}$separator"] = template
+                acc
+            }
+            return templates(new)
+        }
+
+        @JvmStatic
+        fun merge(
+            vararg templates: TemplateRenderer,
+        ): TemplateRenderer {
+            val new = templates.fold(mutableMapOf<String, TemplateRenderer>()) { acc, template ->
+                if (template is Group)
+                    template.provider.keys().forEach {
+                        acc[it] = template[it]!!
+                    }
+                else throw IllegalStateException("Merge should only contains groups")
                 acc
             }
             return templates(new)

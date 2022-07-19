@@ -38,7 +38,7 @@ fun merge2() {
     // and add a separator between the name and its sub blocks.
     // The default separator is "/"
     // here: for-mobile == headers/.for-mobile
-    val masterTemplate = TT.merge(
+    val masterTemplate = TT.group(
         "html" to htmlFile,
         // the key "headers" is corresponding to the tags used in htmlFile
         "headers" to headersFile,

@@ -13,6 +13,6 @@ data class Delimiters(
         val DEFAULT_TEMPLATE = Delimiters("{{", "}}")
         val DEFAULT_BLOCK = Delimiters("--{", "}--")
         const val DEFAULT_SEPARATOR = "."
-        const val DEFAULT_MERGE_SEPARATOR = "/"
+        const val DEFAULT_GROUP_SEPARATOR = "/"
     }
 }

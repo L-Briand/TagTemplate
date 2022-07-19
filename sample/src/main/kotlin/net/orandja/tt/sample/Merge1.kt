@@ -17,7 +17,7 @@ fun merge1() {
     // 1. The merge template is a group, each key inside the group is prepended by the tag
     // 2. The merge template isn't a group, the whole template is behind the tag
     // Here descriptive fall under the 2. and chair under the 1.
-    var renderer: TemplateRenderer = TT.merge(
+    var renderer: TemplateRenderer = TT.group(
         "main" to descriptive,
         "component" to chair,
     )
@@ -34,7 +34,7 @@ fun merge1() {
 
     // It opens up new possibility on how to render things
     // The template have now changed just by having a full template changed.
-    renderer = TT.merge(
+    renderer = TT.group(
         "main" to descriptive,
         "component" to table,
     )
