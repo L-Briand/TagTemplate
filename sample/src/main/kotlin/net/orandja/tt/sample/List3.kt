@@ -1,15 +1,15 @@
 package net.orandja.tt.sample
 
+import net.orandja.tt.TR
 import net.orandja.tt.TT
 import net.orandja.tt.assertEqual
 import net.orandja.tt.renderToString
-import net.orandja.tt.toKeyValueTemplate
 
 fun list3() {
     // See reflection1
     // Given :
-    val user1Group = UserInformation("Auston", "Sherill").toKeyValueTemplate()
-    val user2Group = UserInformation("Marinda", "Abbi").toKeyValueTemplate()
+    val user1Group = TR.makeTemplate(UserInformation("Auston", "Sherill"))
+    val user2Group = TR.makeTemplate(UserInformation("Marinda", "Abbi"))
     val userTemplate = TT.template("( {{ lastName }} - {{ firstName }} ),")
 
     // If you want to render something multiple times you can repeat it.

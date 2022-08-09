@@ -1,13 +1,12 @@
 package net.orandja.tt.templates
 
+import net.orandja.tt.StreamProvider
 import net.orandja.tt.TemplateRenderer
 import net.orandja.tt.templates.Range.Type.TAG
 import net.orandja.tt.templates.Range.Type.TEXT
-import java.io.InputStream
 
 class TemplateStream(
-    private val sourceLastUpdate: () -> Long,
-    private val source: () -> InputStream,
+    private val streamProvider: StreamProvider,
     private val delimiters: Delimiters = Delimiters.DEFAULT_TEMPLATE,
     private var lastModified: Long = Long.MIN_VALUE,
     private var ranges: List<Range> = listOf(),
@@ -16,7 +15,7 @@ class TemplateStream(
     private val stop = delimiters.end.toString().toByteArray()
 
     private fun refreshRange() {
-        val lastUpdated = sourceLastUpdate()
+        val lastUpdated = streamProvider.lastUpdate()
         if (ranges.isNotEmpty() && lastUpdated <= lastModified) return
         lastModified = lastUpdated
 
@@ -26,8 +25,10 @@ class TemplateStream(
         var stopCounter = 0
 
         val updatableRanges = mutableListOf<Range>()
-        source().buffered().use {
-            for (byte in it.iterator()) {
+        streamProvider.source().use {
+            while (true) {
+                val byte = it.read().toByte()
+                if (byte == (-1).toByte()) break
                 // last means idx at 1 for "{{" and end means idx at 2
                 if (byte == start[startCounter]) {
                     startCounter += 1
@@ -73,7 +74,7 @@ class TemplateStream(
         // search in context to render the specified key
         if (key != null) return ctxs.firstOrNull { it.validateTag(key) }?.render(key, ctxs, onNew) ?: false
         refreshRange()
-        source().buffered().use {
+        streamProvider.source().use {
             for (rangeIdx in ranges.indices) {
                 when (ranges[rangeIdx].type) {
                     TEXT -> {
@@ -96,9 +97,10 @@ class TemplateStream(
     }
 
     override fun duplicate(): TemplateRenderer =
-        TemplateStream(sourceLastUpdate, source, delimiters, lastModified, ranges)
+        TemplateStream(streamProvider, delimiters, lastModified, ranges)
 
     override suspend fun validateTag(key: String): Boolean = false
 
-    override fun toString(): String = "T'${String(source().readAllBytes())}'"
+    override fun toString(): String =
+        """'${streamProvider.source().use { it.readAllBytes() }.toString(Charsets.UTF_8)}'$contextString"""
 }

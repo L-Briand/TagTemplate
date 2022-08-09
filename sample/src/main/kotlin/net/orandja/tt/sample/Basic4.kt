@@ -10,7 +10,7 @@ fun basic4() {
     // You can read a template from any stream
     val template = TT.templateStream(
         // This lambda indicates the time at which the stream was last modified
-        sourceLastUpdate = { -1 },
+        lastUpdate = { -1 },
         source = { myTemplate.byteInputStream() }
     )
 

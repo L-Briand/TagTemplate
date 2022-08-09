@@ -4,7 +4,6 @@ import net.orandja.tt.TT
 import net.orandja.tt.assertEqual
 import net.orandja.tt.bindToDataList
 import net.orandja.tt.renderToString
-import net.orandja.tt.toKeyValueTemplate
 
 fun reflection2() {
     val users = listOf(
@@ -19,7 +18,4 @@ fun reflection2() {
     val template = userTemplate bindToDataList users
 
     assertEqual("( Auston - Sherill ),( Marinda - Abbi ),( Tolly  - Sheila ),", template.renderToString())
-
-    // Here's the full transformation behind the extension
-    val templateExhaustive = TT.repeat(users.size, userTemplate) bindTo TT.roll(users.map { it.toKeyValueTemplate() })
 }

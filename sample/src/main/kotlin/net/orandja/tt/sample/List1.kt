@@ -31,13 +31,10 @@ fun list1() {
     val elements2 = itemTemplate bindToList nameBehindTagName
     assertEqual("<li>Sherill</li><li>Abbi</li><li>Sheila</li>", elements2.renderToString())
 
-    // To create your value template with any iterator<T> where T.toString() is the value you want to print
-    // You can use makeTemplateValue("key")
-    val nameBehindTagName2 = names.makeTemplateValue("name")
     // If your data is a bit more complex, let say multiple fields
     // You can use makeTemplate("key") { /* create a group here */ }
     val users = listOf("Will" to "Smith", "Brad" to "pitt")
-    val groupBehindTag = users.makeTemplate("user") {
+    val groupBehindTag = TR.makeTemplate("user", users) {
         TT.values(
             "firstName" to it.first,
             "lastName" to it.second,
@@ -48,4 +45,5 @@ fun list1() {
     val listTemplate = TT.template("<ul>{{ items }}</ul>") bindTo TT.templates("items" to elements)
     // And render it
     assertEqual("<ul><li>Sherill</li><li>Abbi</li><li>Sheila</li></ul>", listTemplate.renderToString())
+    println(listTemplate.toString())
 }

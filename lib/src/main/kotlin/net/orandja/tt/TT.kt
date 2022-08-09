@@ -1,31 +1,45 @@
 package net.orandja.tt
 
-import net.orandja.tt.block.BlockParser
 import net.orandja.tt.templates.*
 import java.io.InputStream
+import java.nio.charset.Charset
 
 class TT {
     companion object {
+
         @JvmStatic
         fun template(template: CharSequence, delimiters: Delimiters = Delimiters.DEFAULT_TEMPLATE) =
             Template(template, delimiters)
 
         @JvmStatic
         fun templateStream(
-            sourceLastUpdate: () -> Long,
+            lastUpdate: () -> Long,
             source: () -> InputStream,
             delimiters: Delimiters = Delimiters.DEFAULT_TEMPLATE,
-        ) = TemplateStream(sourceLastUpdate, source, delimiters)
+        ) = templateStream(StreamProvider(lastUpdate, source), delimiters)
 
         @JvmStatic
-        fun value(value: CharSequence) = Value(value)
+        fun templateStream(
+            streamProvider: StreamProvider,
+            delimiters: Delimiters = Delimiters.DEFAULT_TEMPLATE,
+        ) = TemplateStream(streamProvider, delimiters)
 
         @JvmStatic
-        fun valueStream(source: () -> InputStream) = ValueStream(source)
+        fun value(value: CharSequence) = Value { value }
+
+        @JvmStatic
+        fun valueDelegate(source: () -> CharSequence) = Value(source)
+
+        @JvmStatic
+        fun valueStream(charset: Charset = Charsets.UTF_8, source: () -> InputStream) =
+            Value { String(source().use { it.readAllBytes() }, charset) }
 
         @JvmStatic
         fun values(vararg values: Pair<String, String>) =
             templates(values.associate { it.first to value(it.second) })
+
+        @JvmStatic
+        fun values(values: Map<String, String>) = templates(values.mapValues { value(it.value) })
 
         @JvmStatic
         fun templates(vararg renders: Pair<String, TemplateRenderer>) = templates(renders.toMap())
@@ -53,18 +67,6 @@ class TT {
         @JvmStatic
         fun list(on: TemplateRenderer, vararg elements: TemplateRenderer) =
             repeat(elements.size, on) bindTo roll(*elements)
-
-        @JvmStatic
-        fun block(block: CharSequence, delimiters: Delimiters = Delimiters.DEFAULT_BLOCK) =
-            BlockParser.parseBlock(block, delimiters)
-
-        @JvmStatic
-        fun templatesFromBlock(
-            block: CharSequence,
-            separator: String = Delimiters.DEFAULT_SEPARATOR,
-            blockDelimiter: Delimiters = Delimiters.DEFAULT_BLOCK,
-            templateDelimiter: Delimiters = Delimiters.DEFAULT_TEMPLATE
-        ): TemplateRenderer = templates(block(block, blockDelimiter).asTemplateMap(separator, templateDelimiter))
 
         @JvmStatic
         fun group(

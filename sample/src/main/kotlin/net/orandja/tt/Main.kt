@@ -48,18 +48,6 @@ fun main() {
     println("\n--- reflection2:")
     reflection2()
 
-    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Block1.kt
-    println("\n--- block1:")
-    block1()
-
-    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Block2.kt
-    println("\n--- block2:")
-    block2()
-
-    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Block3.kt
-    println("\n--- block3:")
-    block3()
-
     // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Merge1.kt
     println("\n--- merge1:")
     merge1()
@@ -67,8 +55,4 @@ fun main() {
     // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Merge2.kt
     println("\n--- merge2:")
     merge2()
-
-    // https://github.com/L-Briand/TT/blob/feature/block/sample/src/main/kotlin/net/orandja/tt/sample/Example.kt#L5
-    println("\n--- example")
-    example()
 }

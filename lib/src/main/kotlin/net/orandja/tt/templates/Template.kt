@@ -65,6 +65,5 @@ class Template private constructor(
 
     override fun duplicate(): TemplateRenderer = Template(raw, ranges)
     override suspend fun validateTag(key: String): Boolean = false
-
-    override fun toString(): String = "T'$raw'"
+    override fun toString(): String = """'$raw'$contextString"""
 }

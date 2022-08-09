@@ -1,9 +1,6 @@
 package net.orandja.tt.sample
 
-import net.orandja.tt.TT
-import net.orandja.tt.assertEqual
-import net.orandja.tt.renderToString
-import net.orandja.tt.toKeyValueTemplate
+import net.orandja.tt.*
 
 fun list2() {
     // This part is a bit more complex as it explains how the list works internally.
@@ -12,8 +9,8 @@ fun list2() {
     // Given :
     val user1 = UserInformation("Auston", "Sherill")
     val user2 = UserInformation("Marinda", "Abbi")
-    val user1Group = user1.toKeyValueTemplate() // See reflection1
-    val user2Group = user2.toKeyValueTemplate() // See reflection1
+    val user1Group = TR.makeTemplate(user1) // See reflection1
+    val user2Group = TR.makeTemplate(user2) // See reflection1
     val userTemplate = TT.template("( {{ lastName }} - {{ firstName }} ),")
 
     // You can roll elements on a template to make it dynamic.

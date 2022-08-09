@@ -11,8 +11,6 @@ data class Delimiters(
     }
     companion object {
         val DEFAULT_TEMPLATE = Delimiters("{{", "}}")
-        val DEFAULT_BLOCK = Delimiters("--{", "}--")
-        const val DEFAULT_SEPARATOR = "."
         const val DEFAULT_GROUP_SEPARATOR = "/"
     }
 }

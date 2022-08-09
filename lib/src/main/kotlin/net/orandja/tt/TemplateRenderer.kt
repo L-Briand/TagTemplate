@@ -13,10 +13,10 @@ abstract class TemplateRenderer {
      */
     abstract suspend fun render(key: String?, contexts: Array<TemplateRenderer>, onNew: (CharSequence) -> Unit): Boolean
 
-    /** Duplicate the template */
+    /** Should duplicate this template renderer without its context */
     abstract fun duplicate(): TemplateRenderer
 
-    /** Verify that a tag can be renderer with this template */
+    /** Verify if [key] can be renderer with this template */
     abstract suspend fun validateTag(key: String): Boolean
 
     open var context: TemplateRenderer? = null
@@ -24,19 +24,17 @@ abstract class TemplateRenderer {
 
     /** Allow for depth getter of template */
     open operator fun get(vararg keys: String?): TemplateRenderer? {
-        val result =
-            if (keys.isEmpty()) this
-            else keys[0]?.let(::getExternalTemplate)?.get(*keys.sliceArray(1 until keys.size))
+        val result = if (keys.isEmpty()) this
+        else keys[0]?.let(::getExternalTemplate)?.get(*keys.sliceArray(1 until keys.size))
         return result?.duplicate()
     }
 
     protected open fun getExternalTemplate(key: String): TemplateRenderer? = context?.get(key)
 
-    protected fun mergeContexts(contexts: Array<TemplateRenderer>): Array<TemplateRenderer> {
-        val localContext = context
-        return if (localContext == null) contexts
-        else arrayOf(localContext) + contexts
-    }
+    protected fun mergeContexts(contexts: Array<TemplateRenderer>): Array<TemplateRenderer> =
+        if (context == null) contexts else arrayOf(context!!) + contexts
+
+    protected inline val contextString: String get() = if (context == null) "" else "($context)"
 }
 
 inline fun <reified T : TemplateRenderer> T.renderFlow(key: String? = null): Flow<CharSequence> = flow {

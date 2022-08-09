@@ -8,7 +8,7 @@ In build.gradle.kts :
 
 ```kotlin
 dependencies {
-    implementation("net.orandja.tt:TT:0.1.0")
+    implementation("net.orandja.tt:TT:0.6.0")
 }
 ```
 
