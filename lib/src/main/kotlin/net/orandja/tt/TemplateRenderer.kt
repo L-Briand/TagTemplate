@@ -26,7 +26,7 @@ abstract class TemplateRenderer {
     open operator fun get(vararg keys: String?): TemplateRenderer? {
         val result = if (keys.isEmpty()) this
         else keys[0]?.let(::getExternalTemplate)?.get(*keys.sliceArray(1 until keys.size))
-        return result?.duplicate()
+        return result
     }
 
     protected open fun getExternalTemplate(key: String): TemplateRenderer? = context?.get(key)
