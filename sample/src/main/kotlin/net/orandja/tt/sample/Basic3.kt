@@ -27,7 +27,7 @@ fun basic3() {
     } catch (e: IllegalStateException) {
         e.message
     }
-    assertEqual("tag {{ name }} not found", error)
+    assertEqual("tag \"name\" not found", error)
 
     // If the tag is already set on a lower template it has priority
     // over a tag defined in an upper layer. Here we force the person

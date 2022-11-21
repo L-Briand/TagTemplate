@@ -45,7 +45,7 @@ fun basic2() {
     } catch (e: IllegalStateException) {
         e.message
     }
-    assertEqual("tag {{ lastName }} not found", error)
+    assertEqual("tag \"lastName\" not found", error)
 
     // You can unbind any context
     userTemplate bindTo null

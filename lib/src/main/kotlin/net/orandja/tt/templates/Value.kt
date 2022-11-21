@@ -1,9 +1,10 @@
 package net.orandja.tt.templates
 
 import net.orandja.tt.TemplateRenderer
+import net.orandja.tt.utils.SourceValue
 
 class Value(
-    private val source: () -> CharSequence
+    private val source: SourceValue
 ) : TemplateRenderer() {
 
     override suspend fun render(
@@ -11,7 +12,7 @@ class Value(
         contexts: Array<TemplateRenderer>,
         onNew: (CharSequence) -> Unit
     ): Boolean {
-        onNew(source())
+        onNew(source.valueSource)
         return true
     }
 
@@ -23,5 +24,5 @@ class Value(
             throw IllegalStateException("Value template's context should not be set")
         }
 
-    override fun toString(): String = """'${source()}'"""
+    override fun toString(): String = """'${source.valueSource}'"""
 }

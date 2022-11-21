@@ -1,6 +1,9 @@
 package net.orandja.tt
 
 import net.orandja.tt.templates.*
+import net.orandja.tt.utils.SourceStream
+import net.orandja.tt.utils.SourceTemplate
+import net.orandja.tt.utils.SourceValue
 import java.io.InputStream
 import java.nio.charset.Charset
 
@@ -9,30 +12,32 @@ class TT {
 
         @JvmStatic
         fun template(template: CharSequence, delimiters: Delimiters = Delimiters.DEFAULT_TEMPLATE) =
-            Template(template, delimiters)
+            template(SourceTemplate.Static(template, delimiters))
+
+        @JvmStatic
+        fun template(source: SourceTemplate) = Template(source)
+
+        @JvmStatic
+        fun templateDelegate(delegate: () -> SourceTemplate) = template(SourceTemplate.Delegate(delegate))
 
         @JvmStatic
         fun templateStream(
-            lastUpdate: () -> Long,
-            source: () -> InputStream,
+            sourceStream: SourceStream,
             delimiters: Delimiters = Delimiters.DEFAULT_TEMPLATE,
-        ) = templateStream(StreamProvider(lastUpdate, source), delimiters)
+        ) = template(SourceTemplate.CachedStream(sourceStream, delimiters))
 
         @JvmStatic
-        fun templateStream(
-            streamProvider: StreamProvider,
-            delimiters: Delimiters = Delimiters.DEFAULT_TEMPLATE,
-        ) = TemplateStream(streamProvider, delimiters)
+        fun value(value: CharSequence) = Value(SourceValue.Static(value))
 
         @JvmStatic
-        fun value(value: CharSequence) = Value { value }
+        fun value(source: SourceValue) = Value(source)
 
         @JvmStatic
-        fun valueDelegate(source: () -> CharSequence) = Value(source)
+        fun valueDelegate(delegate: () -> CharSequence) = Value(SourceValue.Delegate(delegate))
 
         @JvmStatic
         fun valueStream(charset: Charset = Charsets.UTF_8, source: () -> InputStream) =
-            Value { String(source().use { it.readAllBytes() }, charset) }
+            valueDelegate { String(source().use { it.readAllBytes() }, charset) }
 
         @JvmStatic
         fun values(vararg values: Pair<String, String>) =
